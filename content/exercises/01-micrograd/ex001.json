@@ -1,0 +1,17 @@
+{
+  "id": "01-micrograd-ex001",
+  "lectureId": "01-micrograd",
+  "segmentId": "01-micrograd-seg02",
+  "title": "Numerical Derivative of a Simple Function",
+  "difficulty": "easy",
+  "order": 1,
+  "topics": ["derivatives", "numerical-methods"],
+  "description": "Implement a function `numerical_derivative(f, x, h=1e-5)` that computes the numerical derivative of function `f` at point `x` using the centered difference formula: `(f(x+h) - f(x-h)) / (2*h)`.",
+  "starterCode": "def numerical_derivative(f, x, h=1e-5):\n    # Compute the numerical derivative of f at x\n    # Use the centered difference formula\n    pass\n",
+  "solutionCode": "def numerical_derivative(f, x, h=1e-5):\n    return (f(x + h) - f(x - h)) / (2 * h)\n",
+  "testCode": "import math\n\ntry:\n    result = numerical_derivative(lambda x: x**2, 3)\n    assert abs(result - 6.0) < 1e-4\n    print(\"PASS: derivative of x^2 at x=3 is ~6\")\nexcept:\n    print(\"FAIL: derivative of x^2 at x=3 is ~6\")\n\ntry:\n    result = numerical_derivative(lambda x: x**3, 2)\n    assert abs(result - 12.0) < 1e-4\n    print(\"PASS: derivative of x^3 at x=2 is ~12\")\nexcept:\n    print(\"FAIL: derivative of x^3 at x=2 is ~12\")\n\ntry:\n    result = numerical_derivative(math.sin, 0)\n    assert abs(result - 1.0) < 1e-4\n    print(\"PASS: derivative of sin(x) at x=0 is ~1\")\nexcept:\n    print(\"FAIL: derivative of sin(x) at x=0 is ~1\")\n",
+  "hints": [
+    "The centered difference formula is more accurate than the forward difference.",
+    "Remember: (f(x+h) - f(x-h)) / (2*h)"
+  ]
+}

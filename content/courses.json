@@ -1,0 +1,79 @@
+{
+  "id": "nn-zero-to-hero",
+  "title": "Neural Networks: Zero to Hero",
+  "description": "A course by Andrej Karpathy on building neural networks from scratch, from micrograd to GPT.",
+  "lectures": [
+    {
+      "id": "01-micrograd",
+      "title": "The spelled-out intro to neural networks and backpropagation: building micrograd",
+      "shortTitle": "micrograd",
+      "youtubeId": "VMj-3S1tku0",
+      "order": 1,
+      "description": "Build an autograd engine and a neural network library from scratch."
+    },
+    {
+      "id": "02-makemore-1",
+      "title": "The spelled-out intro to language modeling: building makemore",
+      "shortTitle": "makemore (bigrams)",
+      "youtubeId": "PaCmpygFfXo",
+      "order": 2,
+      "description": "Bigram character-level language model, counting and neural network approaches."
+    },
+    {
+      "id": "03-makemore-2",
+      "title": "Building makemore Part 2: MLP",
+      "shortTitle": "makemore (MLP)",
+      "youtubeId": "TCH_1BHY58I",
+      "order": 3,
+      "description": "MLP language model following Bengio et al. 2003."
+    },
+    {
+      "id": "04-makemore-3",
+      "title": "Building makemore Part 3: Activations & Gradients, BatchNorm",
+      "shortTitle": "makemore (BatchNorm)",
+      "youtubeId": "P6sfmUTpUmc",
+      "order": 4,
+      "description": "Internals of MLPs, activations, gradients, and BatchNorm."
+    },
+    {
+      "id": "05-makemore-4",
+      "title": "Building makemore Part 4: Becoming a Backprop Ninja",
+      "shortTitle": "makemore (Backprop)",
+      "youtubeId": "q8SA3rM6ckI",
+      "order": 5,
+      "description": "Manual backpropagation through the entire MLP."
+    },
+    {
+      "id": "06-makemore-5",
+      "title": "Building makemore Part 5: Building a WaveNet",
+      "shortTitle": "makemore (WaveNet)",
+      "youtubeId": "t3YJ5hKiMQ0",
+      "order": 6,
+      "description": "Hierarchical / dilated models for language modeling."
+    },
+    {
+      "id": "07-gpt",
+      "title": "Let's build GPT: from scratch, in code, spelled out",
+      "shortTitle": "GPT",
+      "youtubeId": "kCc8FmEb1nY",
+      "order": 7,
+      "description": "Build a GPT from scratch following 'Attention Is All You Need'."
+    },
+    {
+      "id": "08-tokenizer",
+      "title": "Let's build the GPT Tokenizer",
+      "shortTitle": "Tokenizer",
+      "youtubeId": "zduSFxRajkE",
+      "order": 8,
+      "description": "Build a BPE tokenizer from scratch."
+    },
+    {
+      "id": "09-gpt2",
+      "title": "Let's reproduce GPT-2 (124M)",
+      "shortTitle": "GPT-2",
+      "youtubeId": "l8pRSuU81PU",
+      "order": 9,
+      "description": "Reproduce GPT-2 124M from scratch."
+    }
+  ]
+}

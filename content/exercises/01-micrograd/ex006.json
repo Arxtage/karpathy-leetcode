@@ -1,0 +1,17 @@
+{
+  "id": "01-micrograd-ex006",
+  "lectureId": "01-micrograd",
+  "segmentId": "01-micrograd-seg05",
+  "title": "Implement __mul__ for Value",
+  "difficulty": "easy",
+  "order": 6,
+  "topics": ["value-class", "operator-overloading"],
+  "description": "Add the `__mul__` method to Value so that `Value(2) * Value(3)` returns `Value(6)` with `_op='*'` and correct children.",
+  "starterCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n        self._backward = lambda: None\n\n    def __repr__(self):\n        return f'Value(data={self.data:.4f})'\n\n    def __add__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        return Value(self.data + other.data, (self, other), '+')\n\n    def __mul__(self, other):\n        pass\n",
+  "solutionCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n        self._backward = lambda: None\n\n    def __repr__(self):\n        return f'Value(data={self.data:.4f})'\n\n    def __add__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        return Value(self.data + other.data, (self, other), '+')\n\n    def __mul__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        return Value(self.data * other.data, (self, other), '*')\n",
+  "testCode": "try:\n    a = Value(3.0)\n    b = Value(4.0)\n    c = a * b\n    assert c.data == 12.0\n    print(\"PASS: Value(3) * Value(4) has data == 12\")\nexcept:\n    print(\"FAIL: Value(3) * Value(4) has data == 12\")\n\ntry:\n    a = Value(3.0)\n    b = Value(4.0)\n    c = a * b\n    assert c._op == '*'\n    print(\"PASS: Value(3) * Value(4) has _op == '*'\")\nexcept:\n    print(\"FAIL: Value(3) * Value(4) has _op == '*'\")\n\ntry:\n    a = Value(3.0)\n    b = Value(4.0)\n    c = a * b\n    assert len(c._children) == 2\n    print(\"PASS: Value(3) * Value(4) has 2 children\")\nexcept:\n    print(\"FAIL: Value(3) * Value(4) has 2 children\")\n\ntry:\n    a = Value(3.0)\n    c = a * 2\n    assert c.data == 6.0\n    print(\"PASS: Value(3) * 2 has data == 6\")\nexcept:\n    print(\"FAIL: Value(3) * 2 has data == 6\")\n",
+  "hints": [
+    "Same pattern as __add__ but with multiplication",
+    "Don't forget to handle plain numbers"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01-micrograd-ex008",
+  "lectureId": "01-micrograd",
+  "segmentId": "01-micrograd-seg07",
+  "title": "Manual Backward for Multiplication",
+  "difficulty": "easy",
+  "order": 8,
+  "topics": ["backpropagation", "chain-rule"],
+  "description": "Given `a = Value(2.0)`, `b = Value(3.0)`, `c = a * b`, and `c.grad = 1.0`, manually set `a.grad` and `b.grad`.\n\nFor multiplication c = a*b: dc/da = b.data, dc/db = a.data.",
+  "starterCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n\n    def __repr__(self):\n        return f\"Value(data={self.data}, grad={self.grad})\"\n\n    def __add__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        out = Value(self.data + other.data, (self, other), '+')\n        return out\n\n    def __mul__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        out = Value(self.data * other.data, (self, other), '*')\n        return out\n\ndef manual_backward_mul():\n    a = Value(2.0)\n    b = Value(3.0)\n    c = a * b\n    c.grad = 1.0\n\n    # TODO: set a.grad and b.grad using the chain rule for multiplication\n    # For c = a * b:\n    #   dc/da = ?\n    #   dc/db = ?\n    a.grad = 0.0  # fix this\n    b.grad = 0.0  # fix this\n\n    return a, b, c",
+  "solutionCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n\n    def __repr__(self):\n        return f\"Value(data={self.data}, grad={self.grad})\"\n\n    def __add__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        out = Value(self.data + other.data, (self, other), '+')\n        return out\n\n    def __mul__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        out = Value(self.data * other.data, (self, other), '*')\n        return out\n\ndef manual_backward_mul():\n    a = Value(2.0)\n    b = Value(3.0)\n    c = a * b\n    c.grad = 1.0\n\n    # For c = a * b: dc/da = b.data, dc/db = a.data\n    a.grad = b.data  # 3.0\n    b.grad = a.data  # 2.0\n\n    return a, b, c",
+  "testCode": "try:\n    a, b, c = manual_backward_mul()\n    assert c.data == 6.0\n    print(\"PASS: c.data is 6.0\")\nexcept:\n    print(\"FAIL: c.data is 6.0\")\n\ntry:\n    a, b, c = manual_backward_mul()\n    assert a.grad == 3.0\n    print(\"PASS: a.grad is 3.0 (dc/da = b.data)\")\nexcept:\n    print(\"FAIL: a.grad is 3.0 (dc/da = b.data)\")\n\ntry:\n    a, b, c = manual_backward_mul()\n    assert b.grad == 2.0\n    print(\"PASS: b.grad is 2.0 (dc/db = a.data)\")\nexcept:\n    print(\"FAIL: b.grad is 2.0 (dc/db = a.data)\")",
+  "hints": [
+    "For c = a*b, dc/da = b and dc/db = a",
+    "So a.grad = b.data and b.grad = a.data"
+  ]
+}
