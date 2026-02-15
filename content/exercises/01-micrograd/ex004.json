@@ -5,8 +5,10 @@
   "title": "Implement the Value Class Constructor",
   "difficulty": "easy",
   "order": 4,
-  "topics": ["value-class"],
-  "description": "Implement the `Value` class constructor. A `Value` wraps a float `data` and tracks:\n- `data`: the scalar value\n- `grad`: gradient, initialized to 0.0\n- `_children`: set of child Value objects (for graph tracking)\n- `_op`: string describing the operation that produced this value\n- `_backward`: a function (lambda) that does nothing by default\n\nAlso implement `__repr__` to return `'Value(data=X.XXXX)'`.",
+  "topics": [
+    "value-class"
+  ],
+  "description": "Implement the `Value` class — the fundamental building block of our autograd engine. A `Value` wraps a scalar number and needs to track enough information to later reconstruct how it was computed.\n\nThink about what a node in a computation graph needs to store. Also implement `__repr__` to return a string like `'Value(data=3.1400)'` (4 decimal places).",
   "starterCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        pass\n\n    def __repr__(self):\n        pass\n",
   "solutionCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n        self._backward = lambda: None\n\n    def __repr__(self):\n        return f'Value(data={self.data:.4f})'\n",
   "testCode": "try:\n    v = Value(3.0)\n    assert v.data == 3.0\n    print(\"PASS: Value(3.0).data == 3.0\")\nexcept:\n    print(\"FAIL: Value(3.0).data == 3.0\")\n\ntry:\n    v = Value(3.0)\n    assert v.grad == 0.0\n    print(\"PASS: Value(3.0).grad == 0.0\")\nexcept:\n    print(\"FAIL: Value(3.0).grad == 0.0\")\n\ntry:\n    v = Value(3.0)\n    assert v._children == set()\n    print(\"PASS: Value(3.0)._children is empty set\")\nexcept:\n    print(\"FAIL: Value(3.0)._children is empty set\")\n\ntry:\n    v = Value(3.0)\n    assert v._op == ''\n    print(\"PASS: Value(3.0)._op is empty string\")\nexcept:\n    print(\"FAIL: Value(3.0)._op is empty string\")\n\ntry:\n    v = Value(3.14)\n    assert repr(v) == 'Value(data=3.1400)'\n    print(\"PASS: repr(Value(3.14)) == 'Value(data=3.1400)'\")\nexcept:\n    print(\"FAIL: repr(Value(3.14)) == 'Value(data=3.1400)'\")\n",

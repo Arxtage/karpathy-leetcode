@@ -5,8 +5,11 @@
   "title": "Partial Derivatives",
   "difficulty": "easy",
   "order": 3,
-  "topics": ["derivatives", "partial-derivatives"],
-  "description": "Given `f(a, b, c) = a*b + c`, compute the partial derivatives df/da, df/db, df/dc numerically.\n\nImplement `partial_derivatives(a, b, c, h=1e-5)` that returns a dict `{'da': ..., 'db': ..., 'dc': ...}` with the partial derivatives.",
+  "topics": [
+    "derivatives",
+    "partial-derivatives"
+  ],
+  "description": "Given the function `f(a, b, c) = a*b + c`, implement `partial_derivatives(a, b, c, h=1e-5)` that returns a dict `{'da': ..., 'db': ..., 'dc': ...}` containing the partial derivative of `f` with respect to each variable.\n\nA partial derivative measures how the output changes when you nudge one input while holding the others fixed.",
   "starterCode": "def partial_derivatives(a, b, c, h=1e-5):\n    def f(a, b, c):\n        return a * b + c\n    # Compute partial derivatives numerically\n    pass\n",
   "solutionCode": "def partial_derivatives(a, b, c, h=1e-5):\n    def f(a, b, c):\n        return a * b + c\n    da = (f(a + h, b, c) - f(a - h, b, c)) / (2 * h)\n    db = (f(a, b + h, c) - f(a, b - h, c)) / (2 * h)\n    dc = (f(a, b, c + h) - f(a, b, c - h)) / (2 * h)\n    return {'da': da, 'db': db, 'dc': dc}\n",
   "testCode": "try:\n    result = partial_derivatives(2, 3, 4)\n    assert abs(result['da'] - 3.0) < 1e-4\n    print(\"PASS: df/da at (2,3,4) is ~3 (equal to b)\")\nexcept:\n    print(\"FAIL: df/da at (2,3,4) is ~3 (equal to b)\")\n\ntry:\n    result = partial_derivatives(2, 3, 4)\n    assert abs(result['db'] - 2.0) < 1e-4\n    print(\"PASS: df/db at (2,3,4) is ~2 (equal to a)\")\nexcept:\n    print(\"FAIL: df/db at (2,3,4) is ~2 (equal to a)\")\n\ntry:\n    result = partial_derivatives(2, 3, 4)\n    assert abs(result['dc'] - 1.0) < 1e-4\n    print(\"PASS: df/dc at (2,3,4) is ~1\")\nexcept:\n    print(\"FAIL: df/dc at (2,3,4) is ~1\")\n",

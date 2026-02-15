@@ -5,8 +5,11 @@
   "title": "Implement __add__ for Value",
   "difficulty": "easy",
   "order": 5,
-  "topics": ["value-class", "operator-overloading"],
-  "description": "Add the `__add__` method to Value so that `Value(2) + Value(3)` returns a new `Value(5)` with `_children` set to `{self, other}` and `_op` set to `'+'`.\n\nAlso handle the case where other is a plain number (int/float) by wrapping it in a Value.",
+  "topics": [
+    "value-class",
+    "operator-overloading"
+  ],
+  "description": "Implement `__add__` so that two `Value` objects can be added together with `+`. The result should be a new `Value` whose data is the sum, and which remembers how it was created (what inputs produced it, and what operation).\n\nIt should also work when adding a `Value` with a plain number like `Value(2) + 3`.",
   "starterCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n        self._backward = lambda: None\n\n    def __repr__(self):\n        return f'Value(data={self.data:.4f})'\n\n    def __add__(self, other):\n        pass\n",
   "solutionCode": "class Value:\n    def __init__(self, data, _children=(), _op=''):\n        self.data = data\n        self.grad = 0.0\n        self._children = set(_children)\n        self._op = _op\n        self._backward = lambda: None\n\n    def __repr__(self):\n        return f'Value(data={self.data:.4f})'\n\n    def __add__(self, other):\n        other = other if isinstance(other, Value) else Value(other)\n        return Value(self.data + other.data, (self, other), '+')\n",
   "testCode": "try:\n    a = Value(2.0)\n    b = Value(3.0)\n    c = a + b\n    assert c.data == 5.0\n    print(\"PASS: Value(2) + Value(3) has data == 5\")\nexcept:\n    print(\"FAIL: Value(2) + Value(3) has data == 5\")\n\ntry:\n    a = Value(2.0)\n    b = Value(3.0)\n    c = a + b\n    assert c._op == '+'\n    print(\"PASS: Value(2) + Value(3) has _op == '+'\")\nexcept:\n    print(\"FAIL: Value(2) + Value(3) has _op == '+'\")\n\ntry:\n    a = Value(2.0)\n    b = Value(3.0)\n    c = a + b\n    assert len(c._children) == 2\n    print(\"PASS: Value(2) + Value(3) has 2 children\")\nexcept:\n    print(\"FAIL: Value(2) + Value(3) has 2 children\")\n\ntry:\n    a = Value(2.0)\n    c = a + 3\n    assert c.data == 5.0\n    print(\"PASS: Value(2) + 3 has data == 5\")\nexcept:\n    print(\"FAIL: Value(2) + 3 has data == 5\")\n",
