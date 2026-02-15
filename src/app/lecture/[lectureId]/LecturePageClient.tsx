@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Play, Clock } from "lucide-react";
+import { Play, Clock, CheckCircle } from "lucide-react";
 import { VideoSegment, Exercise } from "@/lib/content/types";
 import { useProgress } from "@/lib/progress/useProgress";
 import ProgressBar from "@/components/progress/ProgressBar";
@@ -29,7 +29,7 @@ export default function LecturePageClient({
   segmentsWithExercises,
   allExerciseIds,
 }: Props) {
-  const { getLectureProgress, getExerciseStatus } = useProgress();
+  const { getLectureProgress, getExerciseStatus, isSegmentComplete } = useProgress();
   const { solved, total } = getLectureProgress(allExerciseIds);
 
   return (
@@ -37,16 +37,28 @@ export default function LecturePageClient({
       <ProgressBar solved={solved} total={total} className="mb-8" />
 
       <div className="space-y-3">
-        {segmentsWithExercises.map(({ segment, exercises }) => (
+        {segmentsWithExercises.map(({ segment, exercises }) => {
+          const segmentSolved =
+            exercises.length > 0
+              ? exercises.every((ex) => getExerciseStatus(ex.id) === "solved")
+              : isSegmentComplete(segment.id);
+
+          return (
           <Link
             key={segment.id}
             href={`/lecture/${lectureId}/segment/${segment.id}`}
-            className="block p-4 rounded-lg border border-zinc-800 bg-zinc-900 hover:border-zinc-700 hover:bg-zinc-800/50 transition-colors"
+            className={`block p-4 rounded-lg border transition-colors ${
+              segmentSolved
+                ? "border-green-800/50 bg-green-950/30 hover:border-green-700/50 hover:bg-green-900/20"
+                : "border-zinc-800 bg-zinc-900 hover:border-zinc-700 hover:bg-zinc-800/50"
+            }`}
           >
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 shrink-0 mt-0.5">
-                  <Play className="h-3.5 w-3.5" />
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full shrink-0 mt-0.5 ${
+                  segmentSolved ? "bg-green-900/50 text-green-400" : "bg-zinc-800 text-zinc-400"
+                }`}>
+                  {segmentSolved ? <CheckCircle className="h-4 w-4" /> : <Play className="h-3.5 w-3.5" />}
                 </div>
                 <div>
                   <h3 className="font-medium text-zinc-100">{segment.title}</h3>
@@ -80,7 +92,8 @@ export default function LecturePageClient({
               </div>
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </>
   );

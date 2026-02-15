@@ -5,11 +5,12 @@ import { UserProgress, ExerciseStatus } from "@/lib/content/types";
 import {
   loadProgress,
   saveExerciseProgress as saveExercise,
+  toggleSegmentComplete as toggleSegment,
   resetAllProgress as resetAll,
 } from "./progressStore";
 
 export function useProgress() {
-  const [progress, setProgress] = useState<UserProgress>({ exercises: {} });
+  const [progress, setProgress] = useState<UserProgress>({ exercises: {}, completedSegments: {} });
 
   useEffect(() => {
     setProgress(loadProgress());
@@ -23,9 +24,24 @@ export function useProgress() {
     []
   );
 
+  const toggleSegmentComplete = useCallback(
+    (segmentId: string) => {
+      const updated = toggleSegment(segmentId);
+      setProgress(updated);
+    },
+    []
+  );
+
+  const isSegmentComplete = useCallback(
+    (segmentId: string): boolean => {
+      return !!progress.completedSegments[segmentId];
+    },
+    [progress]
+  );
+
   const resetAllProgress = useCallback(() => {
     resetAll();
-    setProgress({ exercises: {} });
+    setProgress({ exercises: {}, completedSegments: {} });
   }, []);
 
   const getExerciseStatus = useCallback(
@@ -55,6 +71,8 @@ export function useProgress() {
   return {
     progress,
     saveExerciseProgress,
+    toggleSegmentComplete,
+    isSegmentComplete,
     resetAllProgress,
     getExerciseStatus,
     getSavedCode,

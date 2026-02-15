@@ -54,6 +54,7 @@ export interface ExerciseProgress {
 
 export interface UserProgress {
   exercises: Record<string, ExerciseProgress>;
+  completedSegments: Record<string, boolean>;
 }
 
 export interface PyodideResult {

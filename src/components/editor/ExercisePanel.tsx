@@ -40,7 +40,16 @@ export default function ExercisePanel({ exercise, onSolved }: ExercisePanelProps
     saveExerciseProgress(exercise.id, "attempted", code);
 
     const res = await runCode(code, exercise.testCode);
-    if (res.success) {
+
+    // Only mark solved if Python didn't error AND every parsed test line passed
+    const lines = res.stdout.split("\n");
+    const testLines = lines.filter((l) => /^(?:PASS|FAIL|✓|✗|pass|fail)[:\s]/i.test(l));
+    const allTestsPassed =
+      res.success &&
+      testLines.length > 0 &&
+      testLines.every((l) => /^(?:PASS|✓|pass)[:\s]/i.test(l));
+
+    if (allTestsPassed) {
       saveExerciseProgress(exercise.id, "solved", code);
       onSolved?.();
     }

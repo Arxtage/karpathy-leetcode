@@ -1,20 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle, Circle } from "lucide-react";
 import { Exercise } from "@/lib/content/types";
+import { useProgress } from "@/lib/progress/useProgress";
 import ExercisePanel from "@/components/editor/ExercisePanel";
 
 interface Props {
   exercises: Exercise[];
+  segmentId: string;
 }
 
-export default function SegmentPageClient({ exercises }: Props) {
+export default function SegmentPageClient({ exercises, segmentId }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { toggleSegmentComplete, isSegmentComplete } = useProgress();
+
+  const completed = isSegmentComplete(segmentId);
 
   if (exercises.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-zinc-500">
-        <p>No exercises for this segment. Watch the video and continue!</p>
+      <div className="flex flex-col items-center justify-center h-full gap-4 text-zinc-500">
+        <p>No exercises for this segment.</p>
+        <button
+          onClick={() => toggleSegmentComplete(segmentId)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            completed
+              ? "bg-green-900/30 text-green-400 border border-green-800/50 hover:bg-green-900/50"
+              : "bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700"
+          }`}
+        >
+          {completed ? (
+            <>
+              <CheckCircle className="h-4 w-4" />
+              Watched
+            </>
+          ) : (
+            <>
+              <Circle className="h-4 w-4" />
+              Mark as Watched
+            </>
+          )}
+        </button>
       </div>
     );
   }

@@ -9,6 +9,20 @@ import {
 import YouTubePlayer from "@/components/video/YouTubePlayer";
 import SegmentPageClient from "./SegmentPageClient";
 
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  if (m === 0) return `${s}s`;
+  if (s === 0) return `${m}min`;
+  return `${m}min ${s}s`;
+}
+
 interface Props {
   params: Promise<{ lectureId: string; segmentId: string }>;
 }
@@ -59,7 +73,13 @@ export default async function SegmentPage({ params }: Props) {
             />
           </div>
           <div className="px-4 pb-2">
-            <h2 className="text-lg font-semibold">{segment.title}</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold">{segment.title}</h2>
+              <span className="text-xs text-zinc-500 tabular-nums">
+                {formatTime(segment.startTime)} – {formatTime(segment.endTime)}
+                {" "}({formatDuration(segment.endTime - segment.startTime)})
+              </span>
+            </div>
             <p className="text-sm text-zinc-400 mt-1">{segment.description}</p>
           </div>
 
@@ -90,7 +110,7 @@ export default async function SegmentPage({ params }: Props) {
 
         {/* Right: Exercise panel */}
         <div className="lg:w-1/2 flex flex-col overflow-hidden">
-          <SegmentPageClient exercises={exercises} />
+          <SegmentPageClient exercises={exercises} segmentId={segmentId} />
         </div>
       </div>
     </div>

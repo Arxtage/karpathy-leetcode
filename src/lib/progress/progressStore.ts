@@ -4,14 +4,15 @@ const STORAGE_KEY = "karpathy-leetcode-progress";
 
 export function loadProgress(): UserProgress {
   if (typeof window === "undefined") {
-    return { exercises: {} };
+    return { exercises: {}, completedSegments: {} };
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { exercises: {} };
-    return JSON.parse(raw) as UserProgress;
+    if (!raw) return { exercises: {}, completedSegments: {} };
+    const parsed = JSON.parse(raw);
+    return { exercises: {}, completedSegments: {}, ...parsed } as UserProgress;
   } catch {
-    return { exercises: {} };
+    return { exercises: {}, completedSegments: {} };
   }
 }
 
@@ -47,6 +48,17 @@ export function getExerciseProgress(
 ): ExerciseProgress | undefined {
   const progress = loadProgress();
   return progress.exercises[exerciseId];
+}
+
+export function toggleSegmentComplete(segmentId: string): UserProgress {
+  const progress = loadProgress();
+  if (progress.completedSegments[segmentId]) {
+    delete progress.completedSegments[segmentId];
+  } else {
+    progress.completedSegments[segmentId] = true;
+  }
+  saveProgress(progress);
+  return progress;
 }
 
 export function resetAllProgress(): void {

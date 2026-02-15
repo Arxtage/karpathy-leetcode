@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { EditorView, keymap } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
 import { basicSetup } from "codemirror";
+import { indentWithTab } from "@codemirror/commands";
 import { python } from "@codemirror/lang-python";
 import { oneDark } from "@codemirror/theme-one-dark";
 
@@ -42,6 +43,7 @@ export default function CodeEditor({
       doc: value,
       extensions: [
         basicSetup,
+        keymap.of([indentWithTab]),
         python(),
         oneDark,
         runKeymap,
