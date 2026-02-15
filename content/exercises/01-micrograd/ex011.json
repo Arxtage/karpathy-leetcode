@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex011",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg08",
+  "segmentId": "01-micrograd-seg10",
   "title": "Backward Closure for Multiplication",
   "difficulty": "medium",
   "order": 11,

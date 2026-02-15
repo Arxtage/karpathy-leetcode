@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex007",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg06",
+  "segmentId": "01-micrograd-seg07",
   "title": "Manual Backward for Addition",
   "difficulty": "easy",
   "order": 7,

@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex010",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg08",
+  "segmentId": "01-micrograd-seg10",
   "title": "Backward Closure for Addition",
   "difficulty": "medium",
   "order": 10,

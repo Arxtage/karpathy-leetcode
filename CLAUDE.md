@@ -12,7 +12,7 @@ When creating or updating video segment timestamps for a lecture:
    ```
 2. **Read through the transcript** to identify natural topic boundaries — look for phrases like "now let's", "so now we're going to", "okay so", "next", or clear topic shifts.
 3. **Never cut mid-sentence or mid-explanation.** Each segment should start at the beginning of a new topic and end when that topic wraps up naturally (usually right before the next topic intro).
-4. **Segment duration target**: 5-15 minutes. Prefer longer segments that cover a complete idea over short ones that split a concept.
+4. **Segment duration target**: 6-10 minutes preferred. If a segment absolutely cannot be split without breaking a concept, it can be longer — but always try to keep segments under 15 minutes.
 5. **Map exercises to segments** based on which concepts the segment covers. An exercise's `segmentId` must match a segment that teaches the prerequisite knowledge for that exercise.
 
 ## Exercise Descriptions
