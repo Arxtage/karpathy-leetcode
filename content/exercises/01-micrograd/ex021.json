@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex021",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg14",
+  "segmentId": "01-micrograd-seg13",
   "title": "Train an MLP on a Tiny Dataset",
   "difficulty": "hard",
   "order": 21,

@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex009",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg08",
+  "segmentId": "01-micrograd-seg07",
   "title": "Implement tanh for Value",
   "difficulty": "easy",
   "order": 9,

@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex014",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg11",
+  "segmentId": "01-micrograd-seg10",
   "title": "Implement __pow__ for Value",
   "difficulty": "easy",
   "order": 14,

@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex008",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg07",
+  "segmentId": "01-micrograd-seg06",
   "title": "Manual Backward for Multiplication",
   "difficulty": "easy",
   "order": 8,

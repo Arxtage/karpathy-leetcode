@@ -2,11 +2,11 @@
   {
     "id": "01-micrograd-seg01",
     "lectureId": "01-micrograd",
-    "title": "Introduction & Overview",
+    "title": "Introduction & Overview of Micrograd",
     "order": 1,
     "startTime": 0,
-    "endTime": 390,
-    "description": "Karpathy introduces the goals: build micrograd, an autograd engine, and a neural net library on top.",
+    "endTime": 489,
+    "description": "Karpathy introduces micrograd: what it is, what autograd and backpropagation do, how neural nets are just mathematical expressions, and why micrograd is only ~150 lines of code.",
     "exerciseIds": []
   },
   {
@@ -14,139 +14,129 @@
     "lectureId": "01-micrograd",
     "title": "Derivative of a Simple Function",
     "order": 2,
-    "startTime": 390,
-    "endTime": 825,
-    "description": "Numerical computation of derivatives using the limit definition. Plotting f(x) and understanding slope.",
+    "startTime": 489,
+    "endTime": 854,
+    "description": "Plotting f(x) = 3x² - 4x + 5, understanding the definition of a derivative as a limit, and computing numerical derivatives at different points.",
     "exerciseIds": ["01-micrograd-ex001", "01-micrograd-ex002"]
   },
   {
     "id": "01-micrograd-seg03",
     "lectureId": "01-micrograd",
-    "title": "Derivative of Functions with Multiple Inputs",
+    "title": "Derivatives with Multiple Inputs",
     "order": 3,
-    "startTime": 825,
-    "endTime": 1170,
-    "description": "Partial derivatives: how changing a, b, c individually affects the output of f(a,b,c).",
+    "startTime": 854,
+    "endTime": 1160,
+    "description": "Computing partial derivatives of d = a*b + c by nudging each input independently and observing how the output changes.",
     "exerciseIds": ["01-micrograd-ex003"]
   },
   {
     "id": "01-micrograd-seg04",
     "lectureId": "01-micrograd",
-    "title": "The Value Object",
+    "title": "Building the Value Object",
     "order": 4,
-    "startTime": 1170,
-    "endTime": 1620,
-    "description": "Building the Value class that wraps a scalar and tracks the expression graph.",
-    "exerciseIds": ["01-micrograd-ex004"]
+    "startTime": 1160,
+    "endTime": 1495,
+    "description": "Creating the Value class to wrap scalars, implementing __add__ and __mul__, adding _children and _op to track how values were produced.",
+    "exerciseIds": ["01-micrograd-ex004", "01-micrograd-ex005", "01-micrograd-ex006"]
   },
   {
     "id": "01-micrograd-seg05",
     "lectureId": "01-micrograd",
-    "title": "Implementing Add and Mul Operations",
+    "title": "Visualizing the Expression Graph",
     "order": 5,
-    "startTime": 1620,
-    "endTime": 2100,
-    "description": "Overloading __add__ and __mul__ on Value to build expression graphs.",
-    "exerciseIds": ["01-micrograd-ex005", "01-micrograd-ex006"]
+    "startTime": 1495,
+    "endTime": 1748,
+    "description": "Using graphviz to draw computation graphs. Adding labels, building a deeper expression with variables a, b, c, e, d, f, and L.",
+    "exerciseIds": []
   },
   {
     "id": "01-micrograd-seg06",
     "lectureId": "01-micrograd",
-    "title": "Visualization of the Expression Graph",
+    "title": "Manual Backpropagation Through a Simple Graph",
     "order": 6,
-    "startTime": 2100,
-    "endTime": 2460,
-    "description": "Using graphviz to draw the computation graph. Understanding nodes and edges.",
-    "exerciseIds": []
+    "startTime": 1748,
+    "endTime": 3132,
+    "description": "Starting from dL/dL = 1, manually computing gradients for L = d * f where d = c + e. Introducing the chain rule, showing how plus nodes route gradients and times nodes swap-multiply. Verifying each gradient numerically.",
+    "exerciseIds": ["01-micrograd-ex007", "01-micrograd-ex008"]
   },
   {
     "id": "01-micrograd-seg07",
     "lectureId": "01-micrograd",
-    "title": "Manual Backpropagation: Simple Example",
+    "title": "Backpropagation Through a Neuron",
     "order": 7,
-    "startTime": 2460,
-    "endTime": 3060,
-    "description": "Computing gradients by hand for a + b and a * b. The chain rule in action.",
-    "exerciseIds": ["01-micrograd-ex007", "01-micrograd-ex008"]
+    "startTime": 3132,
+    "endTime": 4094,
+    "description": "Building a single neuron (x1*w1 + x2*w2 + b), implementing tanh as an operation on Value, and manually backpropagating through the full neuron computing all gradients.",
+    "exerciseIds": ["01-micrograd-ex009"]
   },
   {
     "id": "01-micrograd-seg08",
     "lectureId": "01-micrograd",
-    "title": "Manual Backpropagation: A Neuron",
+    "title": "Implementing Backward Closures for Operations",
     "order": 8,
-    "startTime": 3060,
-    "endTime": 3600,
-    "description": "Backprop through a single neuron: w*x + b, then tanh activation.",
-    "exerciseIds": ["01-micrograd-ex009"]
+    "startTime": 4094,
+    "endTime": 4650,
+    "description": "Adding _backward closures to __add__, __mul__, and tanh so each operation knows how to propagate gradients. Using += for gradient accumulation.",
+    "exerciseIds": ["01-micrograd-ex010", "01-micrograd-ex011"]
   },
   {
     "id": "01-micrograd-seg09",
     "lectureId": "01-micrograd",
-    "title": "Implementing Backward for Each Operation",
+    "title": "Topological Sort and the Full backward() Method",
     "order": 9,
-    "startTime": 3600,
-    "endTime": 4260,
-    "description": "Adding _backward closures to add, mul, tanh. Each op knows how to propagate gradients.",
-    "exerciseIds": ["01-micrograd-ex010", "01-micrograd-ex011"]
+    "startTime": 4650,
+    "endTime": 5210,
+    "description": "Automating backpropagation: building a topological ordering of the graph, then calling _backward in reverse order. Handling the bug where nodes used multiple times need gradient accumulation.",
+    "exerciseIds": ["01-micrograd-ex012", "01-micrograd-ex013"]
   },
   {
     "id": "01-micrograd-seg10",
     "lectureId": "01-micrograd",
-    "title": "Topological Sort & Full Backward",
+    "title": "Breaking Up tanh and Adding More Operations",
     "order": 10,
-    "startTime": 4260,
-    "endTime": 4800,
-    "description": "Automating backprop: topological sort of the graph, then calling _backward in reverse order.",
-    "exerciseIds": ["01-micrograd-ex012", "01-micrograd-ex013"]
+    "startTime": 5210,
+    "endTime": 5790,
+    "description": "Replacing tanh with exp and individual ops. Implementing __pow__, __neg__, __sub__, __truediv__, __radd__, __rmul__. Showing that you can define operations at any level of abstraction.",
+    "exerciseIds": ["01-micrograd-ex014", "01-micrograd-ex015", "01-micrograd-ex016"]
   },
   {
     "id": "01-micrograd-seg11",
     "lectureId": "01-micrograd",
-    "title": "Implementing Power, ReLU, and Remaining Ops",
+    "title": "Comparison to PyTorch",
     "order": 11,
-    "startTime": 4800,
-    "endTime": 5400,
-    "description": "Adding __pow__, relu, __neg__, __sub__, __truediv__, __radd__, __rmul__ to Value.",
-    "exerciseIds": ["01-micrograd-ex014", "01-micrograd-ex015", "01-micrograd-ex016"]
+    "startTime": 5790,
+    "endTime": 6235,
+    "description": "Doing the same neuron computation in PyTorch to verify results match. Showing how PyTorch's API mirrors what we built, just with tensors instead of scalars.",
+    "exerciseIds": ["01-micrograd-ex017"]
   },
   {
     "id": "01-micrograd-seg12",
     "lectureId": "01-micrograd",
-    "title": "Verifying Gradients Numerically",
+    "title": "Building a Neuron, Layer, and MLP",
     "order": 12,
-    "startTime": 5400,
-    "endTime": 5760,
-    "description": "Comparing analytical gradients from backprop with numerical gradient approximation.",
-    "exerciseIds": ["01-micrograd-ex017"]
+    "startTime": 6235,
+    "endTime": 6670,
+    "description": "Building the neural network library on top of Value: a Neuron class with weights and bias, a Layer of neurons, and a Multi-Layer Perceptron (MLP) that chains layers.",
+    "exerciseIds": ["01-micrograd-ex018", "01-micrograd-ex019", "01-micrograd-ex020"]
   },
   {
     "id": "01-micrograd-seg13",
     "lectureId": "01-micrograd",
-    "title": "Building a Neuron, Layer, and MLP",
+    "title": "Training: Loss Function and Gradient Descent",
     "order": 13,
-    "startTime": 5760,
-    "endTime": 6600,
-    "description": "Building the neural network library: Neuron, Layer, MLP classes on top of Value.",
-    "exerciseIds": ["01-micrograd-ex018", "01-micrograd-ex019", "01-micrograd-ex020"]
+    "startTime": 6670,
+    "endTime": 8040,
+    "description": "Defining a tiny dataset, computing MSE loss, running the forward and backward pass, updating weights with gradient descent. The importance of zeroing gradients. Running multiple training steps to minimize loss.",
+    "exerciseIds": ["01-micrograd-ex021"]
   },
   {
     "id": "01-micrograd-seg14",
     "lectureId": "01-micrograd",
-    "title": "Training the MLP: Loss and Gradient Descent",
+    "title": "Summary and Next Steps",
     "order": 14,
-    "startTime": 6600,
-    "endTime": 7500,
-    "description": "Forward pass, MSE loss, backward, gradient descent. Training loop on a tiny dataset.",
-    "exerciseIds": ["01-micrograd-ex021"]
-  },
-  {
-    "id": "01-micrograd-seg15",
-    "lectureId": "01-micrograd",
-    "title": "Wrapup & Comparison to PyTorch",
-    "order": 15,
-    "startTime": 7500,
-    "endTime": 8130,
-    "description": "Comparing micrograd with PyTorch's autograd. Summary and next steps.",
+    "startTime": 8040,
+    "endTime": 8756,
+    "description": "Recap of what was built: autograd engine and neural net library. Comparing with full micrograd repo and PyTorch internals. Preview of what's next in the series.",
     "exerciseIds": []
   }
 ]

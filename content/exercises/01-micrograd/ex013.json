@@ -1,7 +1,7 @@
 {
   "id": "01-micrograd-ex013",
   "lectureId": "01-micrograd",
-  "segmentId": "01-micrograd-seg10",
+  "segmentId": "01-micrograd-seg09",
   "title": "Implement Full backward() Method",
   "difficulty": "medium",
   "order": 13,
