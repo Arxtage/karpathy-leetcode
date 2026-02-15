@@ -9,6 +9,8 @@ interface PendingMessage {
   reject: (error: Error) => void;
 }
 
+const RUN_TIMEOUT_MS = 10_000; // 10 seconds
+
 class PyodideManager {
   private worker: Worker | null = null;
   private messageId = 0;
@@ -66,12 +68,30 @@ class PyodideManager {
 
   async runCode(userCode: string, testCode: string): Promise<PyodideResult> {
     await this.init();
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const id = this.messageId++;
+
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        // Kill the stuck worker and force a fresh one on next run
+        this.terminate();
+        resolve({
+          success: false,
+          stdout: "",
+          stderr: "",
+          error: "Time Limit Exceeded: code took longer than 10 seconds. Check for infinite loops or recursion.",
+        });
+      }, RUN_TIMEOUT_MS);
+
       this.pending.set(id, {
         type: "run",
-        resolve: resolve as MessageHandler,
-        reject,
+        resolve: (result: PyodideResult) => {
+          clearTimeout(timer);
+          resolve(result);
+        },
+        reject: () => {
+          clearTimeout(timer);
+        },
       });
       this.getWorker().postMessage({ id, type: "run", userCode, testCode });
     });
