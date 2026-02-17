@@ -7,12 +7,14 @@ import {
   getExercisesForSegment,
 } from "@/lib/content/loader";
 import YouTubePlayer from "@/components/video/YouTubePlayer";
+import ResizablePanels from "@/components/layout/ResizablePanels";
 import SegmentPageClient from "./SegmentPageClient";
 
 function formatTime(seconds: number): string {
-  const m = Math.floor(seconds / 60);
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
-  return `${m}:${String(s).padStart(2, "0")}`;
+  return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
 function formatDuration(seconds: number): string {
@@ -61,58 +63,57 @@ export default async function SegmentPage({ params }: Props) {
       </div>
 
       {/* Main content: video + exercises */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        {/* Left: Video + navigation */}
-        <div className="lg:w-1/2 flex flex-col border-r border-zinc-800">
-          <div className="p-4">
-            <YouTubePlayer
-              videoId={lecture.youtubeId}
-              startTime={segment.startTime}
-              endTime={segment.endTime}
-              title={segment.title}
-            />
-          </div>
-          <div className="px-4 pb-2">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold">{segment.title}</h2>
-              <span className="text-xs text-zinc-500 tabular-nums">
-                {formatTime(segment.startTime)} – {formatTime(segment.endTime)}
-                {" "}({formatDuration(segment.endTime - segment.startTime)})
-              </span>
+      <ResizablePanels
+        left={
+          <>
+            <div className="p-4">
+              <YouTubePlayer
+                videoId={lecture.youtubeId}
+                startTime={segment.startTime}
+                endTime={segment.endTime}
+                title={segment.title}
+              />
             </div>
-            <p className="text-sm text-zinc-400 mt-1">{segment.description}</p>
-          </div>
+            <div className="px-4 pb-2">
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-semibold">{segment.title}</h2>
+                <span className="text-xs text-zinc-500 tabular-nums">
+                  {formatTime(segment.startTime)} – {formatTime(segment.endTime)}
+                  {" "}({formatDuration(segment.endTime - segment.startTime)})
+                </span>
+              </div>
+              <p className="text-sm text-zinc-400 mt-1">{segment.description}</p>
+            </div>
 
-          {/* Segment navigation */}
-          <div className="mt-auto px-4 py-3 border-t border-zinc-800 flex justify-between text-sm">
-            {prevSegment ? (
-              <Link
-                href={`/lecture/${lectureId}/segment/${prevSegment.id}`}
-                className="text-zinc-400 hover:text-zinc-200"
-              >
-                &larr; {prevSegment.title}
-              </Link>
-            ) : (
-              <span />
-            )}
-            {nextSegment ? (
-              <Link
-                href={`/lecture/${lectureId}/segment/${nextSegment.id}`}
-                className="text-zinc-400 hover:text-zinc-200"
-              >
-                {nextSegment.title} &rarr;
-              </Link>
-            ) : (
-              <span />
-            )}
-          </div>
-        </div>
-
-        {/* Right: Exercise panel */}
-        <div className="lg:w-1/2 flex flex-col overflow-hidden">
+            {/* Segment navigation */}
+            <div className="mt-auto px-4 py-3 border-t border-zinc-800 flex justify-between text-sm">
+              {prevSegment ? (
+                <Link
+                  href={`/lecture/${lectureId}/segment/${prevSegment.id}`}
+                  className="text-zinc-400 hover:text-zinc-200"
+                >
+                  &larr; {prevSegment.title}
+                </Link>
+              ) : (
+                <span />
+              )}
+              {nextSegment ? (
+                <Link
+                  href={`/lecture/${lectureId}/segment/${nextSegment.id}`}
+                  className="text-zinc-400 hover:text-zinc-200"
+                >
+                  {nextSegment.title} &rarr;
+                </Link>
+              ) : (
+                <span />
+              )}
+            </div>
+          </>
+        }
+        right={
           <SegmentPageClient exercises={exercises} segmentId={segmentId} />
-        </div>
-      </div>
+        }
+      />
     </div>
   );
 }
