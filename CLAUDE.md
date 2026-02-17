@@ -21,6 +21,10 @@ When creating or updating video segment timestamps for a lecture:
 - Don't include implementation formulas, code snippets, or step-by-step algorithms in descriptions.
 - The student should figure out the *how* themselves. Use hints (progressively revealed) for guidance.
 
+## Workflow
+
+- **Commit after every change.** After completing any task (bug fix, feature, content update), create a git commit. Do NOT push — the user will ask to push when ready.
+
 ## Architecture
 
 - Content is JSON files in `content/` — loaded server-side via `src/lib/content/loader.ts`
