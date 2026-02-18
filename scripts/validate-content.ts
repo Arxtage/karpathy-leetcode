@@ -119,6 +119,10 @@ for (const lecture of course.lectures) {
         error(filePath, `Exercise ${exercise.id}: invalid difficulty '${exercise.difficulty}'`);
       }
 
+      if (exercise.runtime && !["pyodide", "local"].includes(exercise.runtime)) {
+        error(filePath, `Exercise ${exercise.id}: invalid runtime '${exercise.runtime}'`);
+      }
+
       if (!exercise.starterCode?.trim()) {
         error(filePath, `Exercise ${exercise.id}: starterCode is empty`);
       }

@@ -3,11 +3,18 @@
 import { useState, useCallback, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Play, RotateCcw, Eye, EyeOff, Lightbulb } from "lucide-react";
-import { Exercise } from "@/lib/content/types";
+import { Exercise, Runtime } from "@/lib/content/types";
 import { usePyodide } from "@/lib/pyodide/usePyodide";
+import { useLocalPython } from "@/lib/pyodide/useLocalPython";
 import { useProgress } from "@/lib/progress/useProgress";
 import CodeEditor from "./CodeEditor";
 import TestRunner from "./TestRunner";
+
+function useRuntime(runtime: Runtime) {
+  const pyodide = usePyodide();
+  const local = useLocalPython();
+  return runtime === "local" ? local : pyodide;
+}
 
 interface ExercisePanelProps {
   exercise: Exercise;
@@ -15,7 +22,7 @@ interface ExercisePanelProps {
 }
 
 export default function ExercisePanel({ exercise, onSolved }: ExercisePanelProps) {
-  const { isLoading, isRunning, result, runCode } = usePyodide();
+  const { isLoading, isRunning, result, runCode } = useRuntime(exercise.runtime ?? "pyodide");
   const { saveExerciseProgress, getSavedCode, getExerciseStatus } = useProgress();
 
   const savedCode = getSavedCode(exercise.id);

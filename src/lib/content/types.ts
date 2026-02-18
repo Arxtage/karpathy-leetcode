@@ -27,6 +27,8 @@ export interface VideoSegment {
 
 export type Difficulty = "easy" | "medium" | "hard";
 
+export type Runtime = "pyodide" | "local";
+
 export interface Exercise {
   id: string;
   lectureId: string;
@@ -40,6 +42,7 @@ export interface Exercise {
   solutionCode: string;
   testCode: string;
   hints: string[];
+  runtime?: Runtime; // default "pyodide"
 }
 
 export type ExerciseStatus = "not_started" | "attempted" | "solved";
