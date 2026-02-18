@@ -1,0 +1,162 @@
+[
+  {
+    "id": "07-gpt-seg01",
+    "lectureId": "07-gpt",
+    "title": "Introduction: What is GPT?",
+    "order": 1,
+    "startTime": 0,
+    "endTime": 302,
+    "description": "Karpathy introduces ChatGPT and language models, discusses the 'Attention Is All You Need' paper that proposed the Transformer architecture, previews the tiny Shakespeare dataset, and outlines the plan to build a GPT from scratch.",
+    "exerciseIds": []
+  },
+  {
+    "id": "07-gpt-seg02",
+    "lectureId": "07-gpt",
+    "title": "Reading & Exploring the Dataset",
+    "order": 2,
+    "startTime": 302,
+    "endTime": 669,
+    "description": "Overview of nanoGPT repository, setting up a Google Colab notebook, downloading and reading the tiny Shakespeare dataset (~1MB, ~1M characters), exploring the character set and vocabulary size (65 unique characters).",
+    "exerciseIds": ["07-gpt-ex001"]
+  },
+  {
+    "id": "07-gpt-seg03",
+    "lectureId": "07-gpt",
+    "title": "Character-Level Tokenization",
+    "order": 3,
+    "startTime": 669,
+    "endTime": 1036,
+    "description": "Building a character-level tokenizer with encode and decode functions using stoi/itos lookup tables. Comparison with other tokenizers (SentencePiece, tiktoken). Encoding the entire Shakespeare text into a PyTorch tensor.",
+    "exerciseIds": ["07-gpt-ex002", "07-gpt-ex003"]
+  },
+  {
+    "id": "07-gpt-seg04",
+    "lectureId": "07-gpt",
+    "title": "Train/Val Split & Data Batching",
+    "order": 4,
+    "startTime": 1036,
+    "endTime": 1336,
+    "description": "Splitting the data into training (90%) and validation (10%) sets. Introducing block_size (context length) and how multiple training examples are packed into a single chunk. Building batches with random offsets using torch.randint and torch.stack.",
+    "exerciseIds": ["07-gpt-ex004", "07-gpt-ex005"]
+  },
+  {
+    "id": "07-gpt-seg05",
+    "lectureId": "07-gpt",
+    "title": "Bigram Language Model",
+    "order": 5,
+    "startTime": 1336,
+    "endTime": 1745,
+    "description": "Building the simplest language model: a bigram model using nn.Embedding. Each token looks up its row in the embedding table to produce logits. Computing the loss with F.cross_entropy, reshaping tensors to match PyTorch's expected dimensions.",
+    "exerciseIds": ["07-gpt-ex006", "07-gpt-ex007"]
+  },
+  {
+    "id": "07-gpt-seg06",
+    "lectureId": "07-gpt",
+    "title": "Text Generation from the Model",
+    "order": 6,
+    "startTime": 1745,
+    "endTime": 2093,
+    "description": "Implementing the generate function: taking the current context, getting logits for the last position, converting to probabilities with softmax, sampling the next token with torch.multinomial, and concatenating to extend the sequence.",
+    "exerciseIds": ["07-gpt-ex008"]
+  },
+  {
+    "id": "07-gpt-seg07",
+    "lectureId": "07-gpt",
+    "title": "Training the Bigram Model",
+    "order": 7,
+    "startTime": 2093,
+    "endTime": 2533,
+    "description": "Setting up the AdamW optimizer and a standard training loop: sample batch, compute loss, zero gradients, backpropagate, update parameters. Organizing code into a script, adding estimate_loss function for smoother loss reporting, and training to ~2.5 loss.",
+    "exerciseIds": ["07-gpt-ex009"]
+  },
+  {
+    "id": "07-gpt-seg08",
+    "lectureId": "07-gpt",
+    "title": "Self-Attention: The Averaging Trick",
+    "order": 8,
+    "startTime": 2533,
+    "endTime": 3120,
+    "description": "Motivating self-attention: tokens need to communicate. Starting with the simplest approach \u2014 averaging past token embeddings using a loop (bag of words). Then showing the matrix multiplication trick: using torch.tril with ones to compute cumulative averages efficiently via batched matmul.",
+    "exerciseIds": ["07-gpt-ex010", "07-gpt-ex011"]
+  },
+  {
+    "id": "07-gpt-seg09",
+    "lectureId": "07-gpt",
+    "title": "Self-Attention: Softmax & Masking",
+    "order": 9,
+    "startTime": 3120,
+    "endTime": 3721,
+    "description": "Version 3 of weighted aggregation using softmax: starting with zeros, masking future positions with -inf via masked_fill, then applying softmax to get normalized weights. Introducing the concept of affinities between tokens. Setting up n_embd and positional embeddings.",
+    "exerciseIds": ["07-gpt-ex012", "07-gpt-ex013"]
+  },
+  {
+    "id": "07-gpt-seg10",
+    "lectureId": "07-gpt",
+    "title": "Self-Attention: Keys, Queries, Values",
+    "order": 10,
+    "startTime": 3721,
+    "endTime": 4299,
+    "description": "The core of self-attention: every token emits a query (what am I looking for?) and a key (what do I contain?). Affinities are computed as query-key dot products. Adding value projections for what gets aggregated. Implementing scaled attention (dividing by sqrt(head_size)).",
+    "exerciseIds": ["07-gpt-ex014"]
+  },
+  {
+    "id": "07-gpt-seg11",
+    "lectureId": "07-gpt",
+    "title": "Implementing the Self-Attention Head",
+    "order": 11,
+    "startTime": 4299,
+    "endTime": 4921,
+    "description": "Notes on attention: communication mechanism over directed graphs, no notion of space (hence positional encodings), encoder vs decoder blocks, self-attention vs cross-attention. Implementing the Head nn.Module with key/query/value projections and register_buffer for the tril mask.",
+    "exerciseIds": ["07-gpt-ex015"]
+  },
+  {
+    "id": "07-gpt-seg12",
+    "lectureId": "07-gpt",
+    "title": "Multi-Head Attention",
+    "order": 12,
+    "startTime": 4921,
+    "endTime": 5209,
+    "description": "Implementing multi-head attention: running multiple attention heads in parallel and concatenating their outputs. With n_embd=32 and 4 heads, each head is 8-dimensional. Adding an output projection layer. Validation loss improves from 2.4 to 2.28.",
+    "exerciseIds": ["07-gpt-ex016", "07-gpt-ex017"]
+  },
+  {
+    "id": "07-gpt-seg13",
+    "lectureId": "07-gpt",
+    "title": "Feed-Forward & Residual Connections",
+    "order": 13,
+    "startTime": 5209,
+    "endTime": 5542,
+    "description": "Adding a feed-forward network (linear + ReLU + linear) after self-attention for per-token computation. Introducing the Transformer Block that intersperses communication and computation. Adding residual (skip) connections for gradient flow, and the 4x inner dimension multiplier.",
+    "exerciseIds": ["07-gpt-ex018", "07-gpt-ex019"]
+  },
+  {
+    "id": "07-gpt-seg14",
+    "lectureId": "07-gpt",
+    "title": "Layer Normalization & Dropout",
+    "order": 14,
+    "startTime": 5542,
+    "endTime": 5968,
+    "description": "Layer normalization vs batch normalization: normalizing rows instead of columns, no running buffers needed. Using pre-norm formulation (LayerNorm before attention and feed-forward). Adding dropout as regularization before residual connections and after attention weights.",
+    "exerciseIds": ["07-gpt-ex020"]
+  },
+  {
+    "id": "07-gpt-seg15",
+    "lectureId": "07-gpt",
+    "title": "Assembling the Full GPT",
+    "order": 15,
+    "startTime": 5968,
+    "endTime": 6380,
+    "description": "Scaling up: batch_size=64, block_size=256, n_embd=384, n_head=6, n_layer=6, dropout=0.2. Assembling the complete GPT model with token + positional embeddings, N transformer blocks, final layer norm, and linear head. Training to 1.48 validation loss, generating Shakespeare-like text.",
+    "exerciseIds": ["07-gpt-ex021", "07-gpt-ex022"]
+  },
+  {
+    "id": "07-gpt-seg16",
+    "lectureId": "07-gpt",
+    "title": "Training GPT & ChatGPT",
+    "order": 16,
+    "startTime": 6380,
+    "endTime": 6978,
+    "description": "Explaining decoder-only vs encoder-decoder architecture, cross-attention for conditioning on external input. Brief nanoGPT walkthrough. How ChatGPT is built: pre-training on internet text (175B parameters, 300B tokens), then fine-tuning with RLHF to create an assistant.",
+    "exerciseIds": ["07-gpt-ex023"]
+  }
+]
