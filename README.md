@@ -1,11 +1,8 @@
 # Karpathy LeetCode
 
-Interactive coding exercises that follow along with Andrej Karpathy's Neural Networks: Zero to Hero lecture series. Watch a segment, then solve exercises that reinforce the concepts.
+LeetCode-style coding exercises for Andrej Karpathy's [Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ). Watch a lecture segment, solve the exercise, repeat.
 
-## Prerequisites
-
-- [Node.js](https://nodejs.org/) 20+
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for PyTorch exercises)
+44 exercises across 2 lectures. Micrograd runs in the browser via Pyodide. GPT exercises run real PyTorch in a sandboxed Docker container on your machine.
 
 ## Quick Start
 
@@ -14,34 +11,15 @@ npm install
 npm run dev
 ```
 
-This single command will:
+Requires [Node.js](https://nodejs.org/) 20+ and [Docker Desktop](https://www.docker.com/products/docker-desktop/). One command handles everything — sandbox setup, token generation, dev server. `Ctrl+C` to stop.
 
-1. Check that Docker is running
-2. Generate a sandbox auth token (first run only)
-3. Build the Python sandbox Docker image (first run only)
-4. Start the dev server at [http://localhost:3000](http://localhost:3000)
+## How It Works
 
-Press `Ctrl+C` to stop everything and clean up running containers.
+- Lectures are split into timed segments synced to the YouTube video
+- Each segment has exercises that test the concepts just covered
+- You write real Python in a code editor, hit Run, tests pass or fail
+- Progress is saved locally in your browser
 
-## Architecture
+## Sandbox
 
-- **Next.js** app with server-side content loading from JSON files in `content/`
-- **Pyodide** (WASM Python) for micrograd exercises — runs in the browser
-- **Docker sandbox** for GPT exercises — real PyTorch running locally in an isolated container with no network/filesystem access
-- **Progress** stored in localStorage
-
-## Content Validation
-
-```bash
-npx tsx scripts/validate-content.ts
-```
-
-## Scripts
-
-| Command | Description |
-|---|---|
-| `npm run dev` | Start everything (Docker check + sandbox + dev server) |
-| `npm run build` | Production build |
-| `npm run sandbox:build` | Rebuild the Docker sandbox image |
-| `npm run sandbox:token` | Regenerate the sandbox auth token |
-| `npm run sandbox:setup` | Token + image build |
+PyTorch exercises execute in a Docker container with `--network=none`, `--read-only`, `--memory=512m`. No filesystem access, no network, no escape. Auth token required for all requests, localhost only.
