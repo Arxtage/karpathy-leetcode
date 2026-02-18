@@ -12,9 +12,16 @@ export function useLocalPython() {
       setIsRunning(true);
       setResult(null);
       try {
+        const headers: Record<string, string> = {
+          "Content-Type": "application/json",
+        };
+        const token = process.env.NEXT_PUBLIC_SANDBOX_TOKEN;
+        if (token) {
+          headers["X-Sandbox-Token"] = token;
+        }
         const res = await fetch("/api/run-python", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify({ userCode, testCode }),
         });
         const data: PyodideResult = await res.json();

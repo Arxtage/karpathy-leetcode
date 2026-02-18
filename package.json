@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sandbox:build": "docker build -t karpathy-sandbox ./sandbox",
+    "sandbox:token": "npx tsx scripts/generate-sandbox-token.ts",
+    "sandbox:setup": "npm run sandbox:token && npm run sandbox:build"
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.2.1",
