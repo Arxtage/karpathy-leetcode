@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Karpathy LeetCode
 
-## Getting Started
+Interactive coding exercises that follow along with Andrej Karpathy's Neural Networks: Zero to Hero lecture series. Watch a segment, then solve exercises that reinforce the concepts.
 
-First, run the development server:
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) 20+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for PyTorch exercises)
+
+## Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This single command will:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Check that Docker is running
+2. Generate a sandbox auth token (first run only)
+3. Build the Python sandbox Docker image (first run only)
+4. Start the dev server at [http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Press `Ctrl+C` to stop everything and clean up running containers.
 
-## Learn More
+## Architecture
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js** app with server-side content loading from JSON files in `content/`
+- **Pyodide** (WASM Python) for micrograd exercises — runs in the browser
+- **Docker sandbox** for GPT exercises — real PyTorch running locally in an isolated container with no network/filesystem access
+- **Progress** stored in localStorage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content Validation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npx tsx scripts/validate-content.ts
+```
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | Description |
+|---|---|
+| `npm run dev` | Start everything (Docker check + sandbox + dev server) |
+| `npm run build` | Production build |
+| `npm run sandbox:build` | Rebuild the Docker sandbox image |
+| `npm run sandbox:token` | Regenerate the sandbox auth token |
+| `npm run sandbox:setup` | Token + image build |
