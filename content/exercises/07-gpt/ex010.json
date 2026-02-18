@@ -1,0 +1,22 @@
+{
+  "id": "07-gpt-ex010",
+  "lectureId": "07-gpt",
+  "segmentId": "07-gpt-seg08",
+  "title": "Averaging Past Tokens (Cumulative Mean)",
+  "difficulty": "easy",
+  "order": 10,
+  "runtime": "local",
+  "topics": [
+    "self-attention",
+    "averaging"
+  ],
+  "description": "Given a tensor `x` of shape `(B, T, C)`, compute a new tensor `xbow` (\"bag of words\") where each position `xbow[b, t]` is the **mean** of all tokens from position `0` up to and including position `t` in the same batch element.\n\nIn other words, `xbow[b, t] = mean(x[b, 0], x[b, 1], ..., x[b, t])`.\n\nUse explicit `for` loops over the batch (`B`) and time (`T`) dimensions to compute this. The output tensor should have the same shape `(B, T, C)` as the input.",
+  "starterCode": "import torch\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\ndef average_past_tokens(x):\n    \"\"\"Compute cumulative mean over the time dimension using for loops.\n    \n    Args:\n        x: tensor of shape (B, T, C)\n    Returns:\n        xbow: tensor of shape (B, T, C) where xbow[b,t] = mean of x[b,0:t+1]\n    \"\"\"\n    B, T, C = x.shape\n    xbow = torch.zeros((B, T, C))\n    # TODO: use nested for loops over b and t to fill xbow\n    # xbow[b, t] should be the mean of x[b, 0:t+1]\n    pass\n    return xbow\n\nxbow = average_past_tokens(x)\nprint(\"xbow shape:\", xbow.shape)\nprint(\"xbow[0, 0]:\", xbow[0, 0])\n",
+  "solutionCode": "import torch\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\ndef average_past_tokens(x):\n    \"\"\"Compute cumulative mean over the time dimension using for loops.\n    \n    Args:\n        x: tensor of shape (B, T, C)\n    Returns:\n        xbow: tensor of shape (B, T, C) where xbow[b,t] = mean of x[b,0:t+1]\n    \"\"\"\n    B, T, C = x.shape\n    xbow = torch.zeros((B, T, C))\n    for b in range(B):\n        for t in range(T):\n            xbow[b, t] = x[b, :t+1].mean(dim=0)\n    return xbow\n\nxbow = average_past_tokens(x)\nprint(\"xbow shape:\", xbow.shape)\nprint(\"xbow[0, 0]:\", xbow[0, 0])\n",
+  "testCode": "import torch\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\nxbow = average_past_tokens(x)\n\ntry:\n    assert xbow.shape == (B, T, C)\n    print(\"PASS: output shape is (B, T, C)\")\nexcept Exception as e:\n    print(f\"FAIL: output shape is (B, T, C) — {e}\")\n\ntry:\n    assert torch.allclose(xbow[0, 0], x[0, 0])\n    print(\"PASS: first position equals itself (no averaging needed)\")\nexcept Exception as e:\n    print(f\"FAIL: first position equals itself — {e}\")\n\ntry:\n    expected_last = x[0, :T].mean(dim=0)\n    assert torch.allclose(xbow[0, T-1], expected_last)\n    print(\"PASS: last position is mean of all tokens\")\nexcept Exception as e:\n    print(f\"FAIL: last position is mean of all tokens — {e}\")\n\ntry:\n    expected_mid = x[1, :2].mean(dim=0)\n    assert torch.allclose(xbow[1, 1], expected_mid)\n    print(\"PASS: middle position is mean of tokens up to that point\")\nexcept Exception as e:\n    print(f\"FAIL: middle position is mean of tokens up to that point — {e}\")\n",
+  "hints": [
+    "Use x[b, :t+1] to slice all tokens from position 0 through t (inclusive) for batch element b.",
+    "Call .mean(dim=0) on the slice to average across the time positions, producing a vector of size C.",
+    "The full pattern: for each (b, t), set xbow[b, t] = x[b, :t+1].mean(dim=0)"
+  ]
+}

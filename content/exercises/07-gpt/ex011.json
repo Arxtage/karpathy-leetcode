@@ -1,0 +1,23 @@
+{
+  "id": "07-gpt-ex011",
+  "lectureId": "07-gpt",
+  "segmentId": "07-gpt-seg08",
+  "title": "Matrix Multiply for Weighted Aggregation",
+  "difficulty": "medium",
+  "order": 11,
+  "runtime": "local",
+  "topics": [
+    "self-attention",
+    "matrix-multiply",
+    "tril"
+  ],
+  "description": "Implement the same cumulative averaging as the previous exercise, but this time **without any for loops**. Instead, use a matrix multiplication trick.\n\nConstruct a lower-triangular weight matrix `wei` of shape `(T, T)` where each row sums to 1 and encodes the uniform average over all tokens up to and including that position. Then compute `xbow2 = wei @ x` to get the result in one shot.\n\nThe output `xbow2` should be identical to the loop-based version (within floating-point tolerance).",
+  "starterCode": "import torch\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\ndef matmul_average(x):\n    \"\"\"Compute cumulative mean using matrix multiplication.\n    \n    Args:\n        x: tensor of shape (B, T, C)\n    Returns:\n        xbow2: tensor of shape (B, T, C)\n    \"\"\"\n    B, T, C = x.shape\n    # TODO: create a lower-triangular matrix of ones using torch.tril\n    # TODO: normalize each row so it sums to 1\n    # TODO: use matrix multiplication (wei @ x) to compute the result\n    pass\n\nxbow2 = matmul_average(x)\nprint(\"xbow2 shape:\", xbow2.shape)\n",
+  "solutionCode": "import torch\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\ndef matmul_average(x):\n    \"\"\"Compute cumulative mean using matrix multiplication.\n    \n    Args:\n        x: tensor of shape (B, T, C)\n    Returns:\n        xbow2: tensor of shape (B, T, C)\n    \"\"\"\n    B, T, C = x.shape\n    wei = torch.tril(torch.ones(T, T))\n    wei = wei / wei.sum(dim=1, keepdim=True)\n    xbow2 = wei @ x\n    return xbow2\n\nxbow2 = matmul_average(x)\nprint(\"xbow2 shape:\", xbow2.shape)\n",
+  "testCode": "import torch\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\nxbow2 = matmul_average(x)\n\n# Compute reference using the loop method\nxbow_ref = torch.zeros((B, T, C))\nfor b in range(B):\n    for t in range(T):\n        xbow_ref[b, t] = x[b, :t+1].mean(dim=0)\n\ntry:\n    assert xbow2.shape == (B, T, C)\n    print(\"PASS: output shape is (B, T, C)\")\nexcept Exception as e:\n    print(f\"FAIL: output shape is (B, T, C) — {e}\")\n\ntry:\n    assert torch.allclose(xbow2, xbow_ref, atol=1e-6)\n    print(\"PASS: matrix multiply result matches loop version\")\nexcept Exception as e:\n    print(f\"FAIL: matrix multiply result matches loop version — {e}\")\n\ntry:\n    assert torch.allclose(xbow2[0, 0], x[0, 0])\n    print(\"PASS: first position equals itself\")\nexcept Exception as e:\n    print(f\"FAIL: first position equals itself — {e}\")\n\ntry:\n    expected_last = x[1, :T].mean(dim=0)\n    assert torch.allclose(xbow2[1, T-1], expected_last, atol=1e-6)\n    print(\"PASS: last position is mean of all tokens\")\nexcept Exception as e:\n    print(f\"FAIL: last position is mean of all tokens — {e}\")\n",
+  "hints": [
+    "torch.tril(torch.ones(T, T)) gives a lower-triangular matrix of ones. Row i has (i+1) ones.",
+    "Divide each row by its sum to normalize: wei = wei / wei.sum(dim=1, keepdim=True). This makes each row encode a uniform average.",
+    "The matrix multiply wei @ x broadcasts over the batch dimension B, so it works directly on (B, T, C) tensors."
+  ]
+}

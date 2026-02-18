@@ -1,0 +1,23 @@
+{
+  "id": "07-gpt-ex012",
+  "lectureId": "07-gpt",
+  "segmentId": "07-gpt-seg09",
+  "title": "Softmax Weighted Aggregation",
+  "difficulty": "medium",
+  "order": 12,
+  "runtime": "local",
+  "topics": [
+    "self-attention",
+    "softmax",
+    "masking"
+  ],
+  "description": "Implement a third version of cumulative averaging that uses the **masked fill + softmax** pattern -- the same pattern used in real self-attention.\n\nStart with a `(T, T)` matrix of zeros, then mask out the upper-triangular positions (where future tokens would be) by filling them with negative infinity. Apply softmax along the last dimension so each row becomes a valid probability distribution. Finally, multiply this weight matrix by `x` to produce the output.\n\nThis approach produces the same result as the previous two methods, but introduces the masking technique that is essential for causal (autoregressive) attention.",
+  "starterCode": "import torch\nimport torch.nn.functional as F\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\ndef softmax_average(x):\n    \"\"\"Compute cumulative mean using masked_fill and softmax.\n    \n    Args:\n        x: tensor of shape (B, T, C)\n    Returns:\n        xbow3: tensor of shape (B, T, C)\n    \"\"\"\n    B, T, C = x.shape\n    # TODO: create the lower-triangular mask\n    # TODO: start with a (T, T) zeros matrix\n    # TODO: use masked_fill to set upper-triangle positions to -inf\n    # TODO: apply F.softmax along dim=-1\n    # TODO: multiply by x\n    pass\n\nxbow3 = softmax_average(x)\nprint(\"xbow3 shape:\", xbow3.shape)\n",
+  "solutionCode": "import torch\nimport torch.nn.functional as F\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\ndef softmax_average(x):\n    \"\"\"Compute cumulative mean using masked_fill and softmax.\n    \n    Args:\n        x: tensor of shape (B, T, C)\n    Returns:\n        xbow3: tensor of shape (B, T, C)\n    \"\"\"\n    B, T, C = x.shape\n    tril = torch.tril(torch.ones(T, T))\n    wei = torch.zeros((T, T))\n    wei = wei.masked_fill(tril == 0, float('-inf'))\n    wei = F.softmax(wei, dim=-1)\n    xbow3 = wei @ x\n    return xbow3\n\nxbow3 = softmax_average(x)\nprint(\"xbow3 shape:\", xbow3.shape)\n",
+  "testCode": "import torch\nimport torch.nn.functional as F\n\ntorch.manual_seed(42)\nB, T, C = 2, 4, 8\nx = torch.randn(B, T, C)\n\nxbow3 = softmax_average(x)\n\n# Compute reference using the loop method\nxbow_ref = torch.zeros((B, T, C))\nfor b in range(B):\n    for t in range(T):\n        xbow_ref[b, t] = x[b, :t+1].mean(dim=0)\n\ntry:\n    assert xbow3.shape == (B, T, C)\n    print(\"PASS: output shape is (B, T, C)\")\nexcept Exception as e:\n    print(f\"FAIL: output shape is (B, T, C) — {e}\")\n\ntry:\n    assert torch.allclose(xbow3, xbow_ref, atol=1e-6)\n    print(\"PASS: softmax version matches loop version\")\nexcept Exception as e:\n    print(f\"FAIL: softmax version matches loop version — {e}\")\n\ntry:\n    # Reconstruct wei to check properties\n    tril = torch.tril(torch.ones(T, T))\n    wei = torch.zeros((T, T))\n    wei = wei.masked_fill(tril == 0, float('-inf'))\n    wei = F.softmax(wei, dim=-1)\n    row_sums = wei.sum(dim=-1)\n    assert torch.allclose(row_sums, torch.ones(T), atol=1e-6)\n    print(\"PASS: weight rows sum to 1\")\nexcept Exception as e:\n    print(f\"FAIL: weight rows sum to 1 — {e}\")\n\ntry:\n    tril = torch.tril(torch.ones(T, T))\n    wei = torch.zeros((T, T))\n    wei = wei.masked_fill(tril == 0, float('-inf'))\n    wei = F.softmax(wei, dim=-1)\n    upper = wei[torch.triu(torch.ones(T, T), diagonal=1) == 1]\n    assert torch.allclose(upper, torch.zeros_like(upper), atol=1e-7)\n    print(\"PASS: upper triangle of weights is zero after softmax\")\nexcept Exception as e:\n    print(f\"FAIL: upper triangle of weights is zero after softmax — {e}\")\n",
+  "hints": [
+    "Use torch.tril(torch.ones(T, T)) to create the lower-triangular mask. Positions where tril == 0 are the \"future\" positions that should be masked.",
+    "masked_fill replaces elements where the condition is True: wei.masked_fill(tril == 0, float('-inf')). The -inf ensures softmax drives those positions to 0.",
+    "F.softmax(wei, dim=-1) normalizes each row. Since the zeros in the lower triangle are all equal, softmax gives them equal weight — producing uniform averaging."
+  ]
+}
