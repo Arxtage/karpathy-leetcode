@@ -1,0 +1,19 @@
+{
+  "id": "07-gpt-ex003",
+  "lectureId": "07-gpt",
+  "segmentId": "07-gpt-seg03",
+  "title": "Encode Text to a Tensor",
+  "difficulty": "easy",
+  "order": 3,
+  "topics": ["tokenization", "pytorch-tensors"],
+  "runtime": "local",
+  "description": "Using the `encode` function (provided), convert the entire `text` string into a PyTorch tensor of integers.\n\nThe resulting tensor `data` should:\n- Be a 1-dimensional tensor\n- Have dtype `torch.long`\n- Contain one integer per character in the text\n\nThis tensor is what we will use to train our language model.",
+  "starterCode": "import torch\n\ntext = \"First Citizen:\\nBefore we proceed any further, hear me speak.\\n\\nAll:\\nSpeak, speak.\\n\\nFirst Citizen:\\nYou are all resolved rather to die than to famish?\\n\\nAll:\\nResolved. resolved.\\n\\nFirst Citizen:\\nFirst, you know Caius Marcius is chief enemy to the people.\\n\\nAll:\\nWe know't, we know't.\\n\\nFirst Citizen:\\nLet us kill him, and we'll have corn at our own price.\\nIs't a verdict?\\n\\nAll:\\nNo more talking on't; let it be done: away, away!\\n\"\n\nchars = sorted(list(set(text)))\nstoi = {ch: i for i, ch in enumerate(chars)}\nitos = {i: ch for i, ch in enumerate(chars)}\n\ndef encode(s):\n    return [stoi[c] for c in s]\n\ndef decode(l):\n    return ''.join([itos[i] for i in l])\n\n# TODO: encode the text and convert it to a PyTorch tensor with dtype torch.long\ndata = None\n",
+  "solutionCode": "import torch\n\ntext = \"First Citizen:\\nBefore we proceed any further, hear me speak.\\n\\nAll:\\nSpeak, speak.\\n\\nFirst Citizen:\\nYou are all resolved rather to die than to famish?\\n\\nAll:\\nResolved. resolved.\\n\\nFirst Citizen:\\nFirst, you know Caius Marcius is chief enemy to the people.\\n\\nAll:\\nWe know't, we know't.\\n\\nFirst Citizen:\\nLet us kill him, and we'll have corn at our own price.\\nIs't a verdict?\\n\\nAll:\\nNo more talking on't; let it be done: away, away!\\n\"\n\nchars = sorted(list(set(text)))\nstoi = {ch: i for i, ch in enumerate(chars)}\nitos = {i: ch for i, ch in enumerate(chars)}\n\ndef encode(s):\n    return [stoi[c] for c in s]\n\ndef decode(l):\n    return ''.join([itos[i] for i in l])\n\ndata = torch.tensor(encode(text), dtype=torch.long)\n",
+  "testCode": "try:\n    assert isinstance(data, torch.Tensor), f\"data should be a torch.Tensor, got {type(data)}\"\n    print(\"PASS: data is a torch.Tensor\")\nexcept Exception as e:\n    print(f\"FAIL: data is a torch.Tensor — {e}\")\n\ntry:\n    assert data.dtype == torch.long, f\"Expected dtype torch.long, got {data.dtype}\"\n    print(\"PASS: data has dtype torch.long\")\nexcept Exception as e:\n    print(f\"FAIL: data has dtype torch.long — {e}\")\n\ntry:\n    assert data.dim() == 1, f\"Expected 1D tensor, got {data.dim()}D\"\n    print(\"PASS: data is a 1D tensor\")\nexcept Exception as e:\n    print(f\"FAIL: data is a 1D tensor — {e}\")\n\ntry:\n    assert data.shape[0] == len(text), f\"Expected length {len(text)}, got {data.shape[0]}\"\n    print(\"PASS: data has one element per character\")\nexcept Exception as e:\n    print(f\"FAIL: data has one element per character — {e}\")\n\ntry:\n    expected_first_5 = encode(text[:5])\n    actual_first_5 = data[:5].tolist()\n    assert actual_first_5 == expected_first_5, f\"Expected first 5 values {expected_first_5}, got {actual_first_5}\"\n    print(\"PASS: first 5 values match the encoded text\")\nexcept Exception as e:\n    print(f\"FAIL: first 5 values match the encoded text — {e}\")\n",
+  "hints": [
+    "First call encode(text) to get a list of integers, then wrap it with torch.tensor().",
+    "Use the dtype parameter: torch.tensor(encoded_list, dtype=torch.long).",
+    "torch.long is the standard integer type for embedding indices in PyTorch."
+  ]
+}

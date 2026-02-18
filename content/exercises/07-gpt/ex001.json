@@ -1,0 +1,19 @@
+{
+  "id": "07-gpt-ex001",
+  "lectureId": "07-gpt",
+  "segmentId": "07-gpt-seg02",
+  "title": "Read & Explore a Text Dataset",
+  "difficulty": "easy",
+  "order": 1,
+  "topics": ["datasets", "text-processing"],
+  "runtime": "local",
+  "description": "Given a text string stored in the variable `text`, compute three things:\n\n1. `total_chars` — the total number of characters in the text.\n2. `unique_chars` — a **sorted** list of all unique characters that appear in the text.\n3. `vocab_size` — the number of unique characters (i.e., the size of the character vocabulary).\n\nThese values are the foundation for building a character-level language model: you need to know what characters exist before you can map them to numbers.",
+  "starterCode": "text = \"First Citizen:\\nBefore we proceed any further, hear me speak.\\n\\nAll:\\nSpeak, speak.\\n\\nFirst Citizen:\\nYou are all resolved rather to die than to famish?\\n\\nAll:\\nResolved. resolved.\\n\\nFirst Citizen:\\nFirst, you know Caius Marcius is chief enemy to the people.\\n\\nAll:\\nWe know't, we know't.\\n\\nFirst Citizen:\\nLet us kill him, and we'll have corn at our own price.\\nIs't a verdict?\\n\\nAll:\\nNo more talking on't; let it be done: away, away!\\n\"\n\n# TODO: compute total_chars — the total number of characters in text\ntotal_chars = None\n\n# TODO: compute unique_chars — a sorted list of all unique characters in text\nunique_chars = None\n\n# TODO: compute vocab_size — the number of unique characters\nvocab_size = None\n",
+  "solutionCode": "text = \"First Citizen:\\nBefore we proceed any further, hear me speak.\\n\\nAll:\\nSpeak, speak.\\n\\nFirst Citizen:\\nYou are all resolved rather to die than to famish?\\n\\nAll:\\nResolved. resolved.\\n\\nFirst Citizen:\\nFirst, you know Caius Marcius is chief enemy to the people.\\n\\nAll:\\nWe know't, we know't.\\n\\nFirst Citizen:\\nLet us kill him, and we'll have corn at our own price.\\nIs't a verdict?\\n\\nAll:\\nNo more talking on't; let it be done: away, away!\\n\"\n\ntotal_chars = len(text)\n\nunique_chars = sorted(list(set(text)))\n\nvocab_size = len(unique_chars)\n",
+  "testCode": "try:\n    assert total_chars == len(text), f\"Expected {len(text)}, got {total_chars}\"\n    print(\"PASS: total_chars is correct\")\nexcept Exception as e:\n    print(f\"FAIL: total_chars is correct — {e}\")\n\ntry:\n    expected_unique = sorted(list(set(text)))\n    assert unique_chars == expected_unique, f\"Expected {expected_unique}, got {unique_chars}\"\n    print(\"PASS: unique_chars is a sorted list of unique characters\")\nexcept Exception as e:\n    print(f\"FAIL: unique_chars is a sorted list of unique characters — {e}\")\n\ntry:\n    assert vocab_size == len(set(text)), f\"Expected {len(set(text))}, got {vocab_size}\"\n    print(\"PASS: vocab_size equals the number of unique characters\")\nexcept Exception as e:\n    print(f\"FAIL: vocab_size equals the number of unique characters — {e}\")\n\ntry:\n    assert isinstance(unique_chars, list), \"unique_chars should be a list\"\n    assert isinstance(vocab_size, int), \"vocab_size should be an int\"\n    print(\"PASS: correct types for unique_chars and vocab_size\")\nexcept Exception as e:\n    print(f\"FAIL: correct types for unique_chars and vocab_size — {e}\")\n",
+  "hints": [
+    "Use len() to count total characters in a string.",
+    "set(text) gives you all unique characters. Convert it to a sorted list with sorted(list(set(text))).",
+    "vocab_size is simply len(unique_chars) — the number of distinct characters."
+  ]
+}
