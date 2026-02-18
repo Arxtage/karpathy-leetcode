@@ -1,0 +1,22 @@
+{
+  "id": "07-gpt-ex018",
+  "lectureId": "07-gpt",
+  "segmentId": "07-gpt-seg13",
+  "title": "Feed-Forward Network",
+  "difficulty": "easy",
+  "order": 18,
+  "runtime": "local",
+  "topics": [
+    "feed-forward",
+    "mlp"
+  ],
+  "description": "Implement a `FeedForward` module — a simple position-wise feed-forward network used in each Transformer block.\n\nYour class should:\n- Accept `n_embd` as a constructor argument\n- Contain a small neural network with a linear layer that expands the dimension by 4x, a ReLU activation, and a linear layer that projects back to the original dimension\n- In `forward(self, x)`, pass the input through this network\n\nThe output shape should match the input shape `(B, T, n_embd)`.",
+  "starterCode": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass FeedForward(nn.Module):\n    def __init__(self, n_embd):\n        super().__init__()\n        # TODO: Create a sequential network:\n        #   Linear(n_embd -> 4 * n_embd), ReLU, Linear(4 * n_embd -> n_embd)\n        pass\n\n    def forward(self, x):\n        # TODO: Pass x through the network\n        pass\n",
+  "solutionCode": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass FeedForward(nn.Module):\n    def __init__(self, n_embd):\n        super().__init__()\n        self.net = nn.Sequential(\n            nn.Linear(n_embd, 4 * n_embd),\n            nn.ReLU(),\n            nn.Linear(4 * n_embd, n_embd),\n        )\n\n    def forward(self, x):\n        return self.net(x)\n",
+  "testCode": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nB, T, C = 2, 8, 32\nx = torch.randn(B, T, C)\nff = FeedForward(C)\n\ntry:\n    out = ff(x)\n    assert out.shape == (B, T, C), f\"Expected shape {(B, T, C)}, got {out.shape}\"\n    print(f\"PASS: output shape matches input shape {out.shape}\")\nexcept Exception as e:\n    print(f\"FAIL: output shape matches input shape — {e}\")\n\ntry:\n    assert isinstance(ff, nn.Module), \"FeedForward should be an nn.Module\"\n    print(\"PASS: FeedForward is an nn.Module\")\nexcept Exception as e:\n    print(f\"FAIL: FeedForward is an nn.Module — {e}\")\n\ntry:\n    has_linear = False\n    for module in ff.modules():\n        if isinstance(module, nn.Linear):\n            has_linear = True\n            break\n    assert has_linear, \"FeedForward should contain Linear layers\"\n    linear_layers = [m for m in ff.modules() if isinstance(m, nn.Linear)]\n    assert len(linear_layers) == 2, f\"Expected 2 Linear layers, got {len(linear_layers)}\"\n    print(\"PASS: has exactly 2 Linear layers\")\nexcept Exception as e:\n    print(f\"FAIL: has exactly 2 Linear layers — {e}\")\n\ntry:\n    linear_layers = [m for m in ff.modules() if isinstance(m, nn.Linear)]\n    assert linear_layers[0].in_features == C, f\"First linear input should be {C}\"\n    assert linear_layers[0].out_features == 4 * C, f\"First linear output should be {4 * C}\"\n    assert linear_layers[1].in_features == 4 * C, f\"Second linear input should be {4 * C}\"\n    assert linear_layers[1].out_features == C, f\"Second linear output should be {C}\"\n    print(f\"PASS: linear dimensions are correct ({C} -> {4*C} -> {C})\")\nexcept Exception as e:\n    print(f\"FAIL: linear dimensions are correct — {e}\")\n",
+  "hints": [
+    "Use nn.Sequential to group the layers together for a clean forward pass.",
+    "The inner dimension is 4 * n_embd — this expansion ratio is a standard Transformer design choice.",
+    "nn.Sequential(nn.Linear(...), nn.ReLU(), nn.Linear(...)) lets you call self.net(x) directly in forward."
+  ]
+}
